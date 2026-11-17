@@ -2,8 +2,8 @@
 
 A coach-ready kit for Microsoft coaches teaching TRS teams how to give Copilot
 context, clarify requirements, review changes, generate documentation/tests, and
-explain a codebase. Start by building repository-wide Copilot instructions, then
-continue with the five existing labs; no production access is needed.
+explain a codebase. Start with the repository orientation, then work through the
+six core labs; no production access is needed.
 
 **Teaching sample only:** all examples are synthetic. This repository does not
 implement TRS policy, evaluate members, approve requests, or connect to TRS systems.
@@ -100,11 +100,13 @@ For a skill, ask explicitly to use `requirements-quality` or `code-review` and
 check whether the client loaded it. Otherwise attach its `SKILL.md` manually.
 Manual attachment demonstrates the procedure, not automatic skill discovery.
 
-### Hands-on VS Code tracks for local work
+### Optional 30-minute hands-on VS Code warm-up
 
-Walk through these tracks in a training copy of the repository (about 30 minutes).
-Participants take turns driving and reviewing. They practice using Copilot against
-the live editor, not just hearing a list of features. VS Code labels and features
+This short local exercise is separate from, and not included in, the 2-hour-20-minute
+core workshop below. It is an optional practical warm-up; use it before the core
+labs or in place of selected demonstrations when time is limited. Participants
+take turns driving and reviewing, and practice using Copilot against the live
+editor rather than only hearing a list of features. VS Code labels and features
 vary with version, Copilot plan, and organization policy; use the fallback below
 if a control is unavailable. Use synthetic examples only, and review every edit,
 terminal command, and test result yourself.
@@ -214,6 +216,23 @@ Pair a driver with a reviewer; switch roles between labs. Begin with a plain
 prompt, then repeat with the kit and compare specificity, evidence, and assumptions.
 AI wording will vary: evaluate the acceptance checks, not exact prose. Save the
 agreed outputs in your team's approved training workspace, never with real data.
+The order establishes shared guidance first, teaches review and requirements
+discovery as separate workflows, then focuses on code behavior and closes with
+onboarding. Do not treat Labs 3–5 as one feature lifecycle: they use different
+inputs and produce different artifacts.
+
+### Opening: establish the baseline and map the assets (10 minutes)
+
+**Coach steps:** follow the [Quick start](#quick-start-10-minutes) and confirm the
+documented 9-case test baseline and sample outputs. Use [What belongs where?](#what-belongs-where)
+to orient participants to repository instructions, path-specific instructions,
+prompts, skills, roles, and workflows. Identify which assets are ready to use and
+which are templates or require extra setup: in particular, the custom agent is a
+role template, and the agentic workflow is source-only until compiled and approved.
+Check the client-specific loading caveat before relying on any Copilot feature.
+
+**Checkpoint:** participants know how to verify the local sample, can distinguish
+the asset types, and understand that client support and permissions vary.
 
 ### 1. Build repository-wide Copilot instructions (20 minutes)
 
@@ -274,6 +293,8 @@ evidence, impact, fix, and test scenario; uncertain items separated. A human che
 each finding. Repeat on a participant's real training diff to reuse the workflow.
 GitHub's native **Request Copilot review** can also use repository guidance when
 available; the prompt/skill is a repeatable interactive workflow, not an automatic PR reviewer.
+This lab's deliberately hypothetical diff is a review exercise, not a change to the
+synthetic intake scenario in Lab 4.
 
 ### 4. Portfolio intake clarifier (20 minutes)
 
@@ -331,6 +352,19 @@ why presence validation differs from requirements analysis.
 **Deliverable / acceptance:** an evidence-backed onboarding handoff with entry points,
 data flow, dependencies, verified commands/outputs, limits, and open questions.
 The teammate can run both scenarios and identify where a new rule and its tests belong.
+
+### Synthesis and close (10 minutes)
+
+Have each pair present one lab artifact and the evidence they used to verify it.
+Connect the artifacts as complementary skills: repository guidance sets context,
+intake analysis clarifies a need, tests and documentation capture code behavior,
+and review evaluates a supplied change. These exercises do not imply that the
+intake example changed the sample application. Ask participants to name one
+remaining question or human decision and restate why a passing test, nonblank
+field, or Copilot response is not business approval.
+
+**Checkpoint:** the group can explain what each artifact is for, how it was
+verified, and where human review or client-specific setup remains necessary.
 
 ## Optional: agentic workflow demonstration (15–20 minutes)
 
