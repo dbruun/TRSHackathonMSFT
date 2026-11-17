@@ -100,39 +100,84 @@ For a skill, ask explicitly to use `requirements-quality` or `code-review` and
 check whether the client loaded it. Otherwise attach its `SKILL.md` manually.
 Manual attachment demonstrates the procedure, not automatic skill discovery.
 
-### VS Code power moves for local work
+### Hands-on VS Code tracks for local work
 
-These workflows use the editor's live code and tools; labels and availability can
-vary with your VS Code version, Copilot plan, and organization policy.
+Walk through these tracks in a training copy of the repository (about 30 minutes).
+Participants take turns driving and reviewing. They practice using Copilot against
+the live editor, not just hearing a list of features. VS Code labels and features
+vary with version, Copilot plan, and organization policy; use the fallback below
+if a control is unavailable. Use synthetic examples only, and review every edit,
+terminal command, and test result yourself.
 
-1. **Keep context deliberate.** Select the relevant code and use inline chat
-   (`Ctrl+I` on Windows/Linux, `Cmd+I` on macOS) for a focused explanation or
-   small edit. For a wider question, add only the relevant files from the chat
-   context picker (or type `#` to discover context variables). Check **Used
-   references** in the response to confirm Copilot saw the files you intended.
-2. **Plan before delegating.** In chat, ask in **Ask** mode for a read-only plan;
-   clarify assumptions and acceptance checks. Then switch to **Agent** mode only
-   when you want Copilot to edit files or run tools. Keep the requested scope
-   small, review proposed terminal commands and the complete diff, and run the
-   relevant tests before accepting the result.
-3. **Try Copilot Fusion when model choice is overhead.** Select **Copilot Fusion**
-   in the model picker to let Copilot route and orchestrate models for each
-   request. Use the standard effort for everyday work and consider a higher
-   effort for a substantial, well-scoped change. Higher-effort orchestration can
-   take longer and use more AI resources; it does not replace checking the diff,
-   tests, or policy. Fusion availability and effort levels depend on your plan
-   and organization settings.
-4. **Get a second opinion (“rubber duck”).** The built-in Rubber Duck agent is
-   documented for Copilot CLI and the Copilot app, not VS Code Chat. In VS Code,
-   open a separate **Ask** chat, optionally select a different available model,
-   attach the plan or diff and relevant tests, and ask:
-   “Critique this plan/diff for correctness risks and missing tests. Do not edit
-   files. Separate concrete findings from questions.” Treat the response as
-   suggestions to verify, not as approval or a security review.
-5. **Use a tight local feedback loop.** Ask the agent to run one relevant existing
-   test command after an edit, inspect the output, then review the diff and run
-   the repository's full checks when appropriate. Keep real participant data,
-   credentials, and production logs out of chat and local prompts.
+#### Track 1: Give Copilot the right context (8 minutes)
+
+**Start with:** `src/Trs.Intake/IntakeReviewer.cs` and
+`tests/Trs.Intake.Tests/IntakeReviewerTests.cs`.
+
+1. Select the `Assess` method and open inline chat (`Ctrl+I` on Windows/Linux,
+   `Cmd+I` on macOS). Ask: “Explain what makes a request ready and what this
+   method does not establish. Do not edit the code.”
+2. In a wider Chat, attach only those two files (or type `#` to discover context
+   variables). Ask: “Trace how a whitespace-only field is handled and identify
+   the test that demonstrates it.”
+3. Check **Used references**. Confirm the answer points to the supplied method
+   and test, then verify the claim in those files.
+
+**Checkpoint:** the participant can name the relevant code and test and explain
+why nonblank fields do not prove requirement quality. If references are missing
+or irrelevant, adjust context and ask again before relying on the answer.
+
+#### Track 2: Plan, then make one small change (12 minutes)
+
+**Task:** add a focused test showing that a whitespace-only `BusinessOwner`
+blocks readiness when the other fields are complete.
+
+1. In **Ask** mode, attach the reviewer and test files. Ask:
+   “Plan a focused test for a whitespace-only BusinessOwner with all other
+   fields complete. Do not edit files. State the expected question and the
+   acceptance check.”
+2. Review the plan. Confirm it only tests existing presence-check behavior and
+   does not introduce policy or change production code.
+3. Switch to **Agent** mode only if the participant and coach approve the plan.
+   Ask it to add just the test. Review the proposed tool actions and diff; reject
+   unrelated edits.
+4. Run the focused test from the repository root:
+
+   ```sh
+   dotnet test tests/Trs.Intake.Tests/Trs.Intake.Tests.csproj --filter FullyQualifiedName~IntakeReviewerTests
+   ```
+
+**Checkpoint:** the new test fails if the whitespace-only owner is treated as
+present, passes with the current implementation, and leaves production code
+unchanged. If Agent mode or edits are not available, have participants draft the
+test and its expected result without applying it.
+
+#### Track 3: Verify and get a second opinion (10 minutes)
+
+1. Inspect the complete diff and test output; confirm only the intended test was
+   added. A passing test is evidence for that case, not proof of overall quality.
+2. In a separate **Ask** chat, attach the diff and relevant tests. Ask:
+   “Critique this diff for correctness risks and missing regression tests. Do not
+   edit files. Separate concrete findings from questions.”
+   This manual second opinion is distinct from the built-in Rubber Duck agent,
+   which is documented for Copilot CLI and the Copilot app, not VS Code Chat.
+3. Verify any suggestions against the source and tests. Do not treat the response
+   as approval or a security review. Run the full repository checks when appropriate.
+
+**Checkpoint:** the reviewer can explain the change, its test evidence, and any
+remaining gap before accepting it.
+
+**Optional model experiment:** if Copilot Fusion appears in the model picker,
+repeat Track 2's read-only planning request with Fusion. Compare the proposed
+plan and effort with the first response; model choice does not change the
+acceptance check or the need for human review. Availability and effort options
+depend on plan and organization settings, and higher effort may take longer or
+use more AI resources.
+
+**Fallback:** if prompt discovery, inline chat, references, Agent mode, or Fusion
+is unavailable, use the normal Chat composer and attach the named files manually.
+Manual attachment is a way to complete the exercise, not evidence that the client
+automatically loaded repository instructions or other assets.
 
 ### Reusable custom agent role template
 
