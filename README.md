@@ -100,6 +100,40 @@ For a skill, ask explicitly to use `requirements-quality` or `code-review` and
 check whether the client loaded it. Otherwise attach its `SKILL.md` manually.
 Manual attachment demonstrates the procedure, not automatic skill discovery.
 
+### VS Code power moves for local work
+
+These workflows use the editor's live code and tools; labels and availability can
+vary with your VS Code version, Copilot plan, and organization policy.
+
+1. **Keep context deliberate.** Select the relevant code and use inline chat
+   (`Ctrl+I` on Windows/Linux, `Cmd+I` on macOS) for a focused explanation or
+   small edit. For a wider question, add only the relevant files from the chat
+   context picker (or type `#` to discover context variables). Check **Used
+   references** in the response to confirm Copilot saw the files you intended.
+2. **Plan before delegating.** In chat, ask in **Ask** mode for a read-only plan;
+   clarify assumptions and acceptance checks. Then switch to **Agent** mode only
+   when you want Copilot to edit files or run tools. Keep the requested scope
+   small, review proposed terminal commands and the complete diff, and run the
+   relevant tests before accepting the result.
+3. **Try Copilot Fusion when model choice is overhead.** Select **Copilot Fusion**
+   in the model picker to let Copilot route and orchestrate models for each
+   request. Use the standard effort for everyday work and consider a higher
+   effort for a substantial, well-scoped change. Higher-effort orchestration can
+   take longer and use more AI resources; it does not replace checking the diff,
+   tests, or policy. Fusion availability and effort levels depend on your plan
+   and organization settings.
+4. **Get a second opinion (“rubber duck”).** The built-in Rubber Duck agent is
+   documented for Copilot CLI and the Copilot app, not VS Code Chat. In VS Code,
+   open a separate **Ask** chat, optionally select a different available model,
+   attach the plan or diff and relevant tests, and ask:
+   “Critique this plan/diff for correctness risks and missing tests. Do not edit
+   files. Separate concrete findings from questions.” Treat the response as
+   suggestions to verify, not as approval or a security review.
+5. **Use a tight local feedback loop.** Ask the agent to run one relevant existing
+   test command after an edit, inspect the output, then review the diff and run
+   the repository's full checks when appropriate. Keep real participant data,
+   credentials, and production logs out of chat and local prompts.
+
 ### Reusable custom agent role template
 
 Use your client's **Create custom agent** UI to save this role in its supported
@@ -316,6 +350,9 @@ skills, and agentic workflows. Examples here are TRS-focused .NET teaching mater
 not a copy of that repository's application or infrastructure.
 
 Check current client support and syntax before adopting:
+- [Asking GitHub Copilot questions in your IDE](https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/chat-with-copilot/chat-in-ide)
+- [About GitHub Copilot Fusion](https://docs.github.com/en/copilot/concepts/models/copilot-fusion)
+- [Getting a second opinion with the rubber duck agent](https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/getting-a-second-opinion)
 - [Repository custom instructions](https://docs.github.com/en/copilot/concepts/prompting-and-context/custom-instructions)
 - [Custom instruction support matrix](https://docs.github.com/en/copilot/reference/custom-instructions-support)
 - [Prompt files](https://docs.github.com/en/copilot/concepts/prompting-and-context/prompt-files)
