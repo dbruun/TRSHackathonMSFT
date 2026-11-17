@@ -2,7 +2,8 @@
 
 A coach-ready kit for Microsoft coaches teaching TRS teams how to give Copilot
 context, clarify requirements, review changes, generate documentation/tests, and
-explain a codebase. Start with the five labs below; no production access is needed.
+explain a codebase. Start by building repository-wide Copilot instructions, then
+continue with the five existing labs; no production access is needed.
 
 **Teaching sample only:** all examples are synthetic. This repository does not
 implement TRS policy, evaluate members, approve requests, or connect to TRS systems.
@@ -75,7 +76,7 @@ deterministic sample checks presence; the intake lab examines requirement qualit
 | Root `AGENTS.md` | Shared project context and working agreement for supporting agents; not an agent definition | [Framework and adaptation worksheet](AGENTS.md) |
 | `.github/copilot-instructions.md` | Repository-wide Copilot guidance | [Short entry point](.github/copilot-instructions.md) |
 | `.github/instructions/*.instructions.md` | Additional rules selected by the `applyTo` file glob | [C# rules](.github/instructions/dotnet.instructions.md) |
-| `.github/prompts/*.prompt.md` | A reusable task explicitly invoked by the user | [Five lab prompts](.github/prompts) |
+| `.github/prompts/*.prompt.md` | A reusable task explicitly invoked by the user | [Six lab prompts](.github/prompts) |
 | `.github/skills/<name>/SKILL.md` | A discoverable multi-step procedure, selected by its description when relevant | [Requirements quality](.github/skills/requirements-quality/SKILL.md), [code review](.github/skills/code-review/SKILL.md) |
 | Custom agent definition | A named role with its own instructions and allowed tools; selected in a supporting client's agent picker | Copyable role template below |
 | `.github/workflows/*.yml` | Deterministic GitHub Actions automation | [.NET validation](.github/workflows/dotnet.yml) |
@@ -90,8 +91,9 @@ Instructions and tool restrictions complement, but do not replace, platform acce
 
 ### Using the prompts and skills
 
-In a supporting VS Code Copilot Chat, type `/` and choose `agent-context`,
-`review-code`, `clarify-intake`, `docs-and-tests`, or `explain-codebase`. Attach
+In a supporting VS Code Copilot Chat, type `/` and choose
+`copilot-instructions`, `agent-context`, `review-code`, `clarify-intake`,
+`docs-and-tests`, or `explain-codebase`. Attach
 the files, diff, or synthetic request named in each lab. If prompt discovery is
 unavailable, open the linked prompt, copy its body into Chat, and attach the inputs.
 For a skill, ask explicitly to use `requirements-quality` or `code-review` and
@@ -127,14 +129,35 @@ Adapt the role without duplicating all shared rules:
 | Documentation/test coach | Use the docs-and-tests prompt; propose a matrix before edits | Add edit/terminal tools only after human approval |
 | Onboarding guide | Use the explain-codebase prompt; trace code with evidence | Read/search only; do not invent infrastructure |
 
-## Coach playbook: five core labs (about 2 hours)
+## Coach playbook: six core labs (about 2 hours 20 minutes)
 
 Pair a driver with a reviewer; switch roles between labs. Begin with a plain
 prompt, then repeat with the kit and compare specificity, evidence, and assumptions.
 AI wording will vary: evaluate the acceptance checks, not exact prose. Save the
 agreed outputs in your team's approved training workspace, never with real data.
 
-### 1. Build the “perfect AGENTS.md” framework (20 minutes)
+### 1. Build repository-wide Copilot instructions (20 minutes)
+
+**Input:** the repository, its [AGENTS.md worksheet](AGENTS.md), and the existing
+[`.github/copilot-instructions.md`](.github/copilot-instructions.md) as a worked
+example. Run [copilot-instructions](.github/prompts/copilot-instructions.prompt.md):
+“Draft concise repository-wide instructions from verified project facts.”
+
+**Coach steps:** explain that `.github/copilot-instructions.md` is for guidance
+that should apply broadly to Copilot work in the repository. Contrast it with
+shared project context in `AGENTS.md`, path-specific rules in
+`.github/instructions/`, and reusable tasks in `.github/prompts/`. Inspect the
+project first, identify stable facts and boundaries, and draft only actionable
+guidance; link to detailed sources instead of duplicating them. Review the
+evidence and questions, then have participants create or revise the file in
+their training copy. Check that the intended Copilot client actually loads it.
+
+**Deliverable / acceptance:** a concise `.github/copilot-instructions.md` draft
+with evidence for project-specific claims, clear boundaries, no invented policy
+or unnecessary duplication, and a client-specific loading check. The draft is
+reviewed before it is adopted.
+
+### 2. Build the “perfect AGENTS.md” framework (20 minutes)
 
 **Input:** [AGENTS.md](AGENTS.md), the source, and the test project.
 Run [agent-context](.github/prompts/agent-context.prompt.md):
@@ -149,7 +172,7 @@ Replace project facts before adopting the template elsewhere.
 all eight worksheet areas covered, commands verified, unknowns labeled, and no
 invented TRS policy. Explain why a large instruction file is not automatically better.
 
-### 2. Copilot code review assistant (20 minutes)
+### 3. Copilot code review assistant (20 minutes)
 
 **Input:** reviewer instructions, source/tests, and this hypothetical diff:
 
@@ -173,7 +196,7 @@ each finding. Repeat on a participant's real training diff to reuse the workflow
 GitHub's native **Request Copilot review** can also use repository guidance when
 available; the prompt/skill is a repeatable interactive workflow, not an automatic PR reviewer.
 
-### 3. Portfolio intake clarifier (20 minutes)
+### 4. Portfolio intake clarifier (20 minutes)
 
 **Input:** “Make our portfolio intake better. The demo team needs a dashboard soon.”
 Run [clarify-intake](.github/prompts/clarify-intake.prompt.md), using the
@@ -192,7 +215,7 @@ table, prioritized questions with answering roles, provisional acceptance criter
 test matrix, blockers, and sign-off. Every blocker has a question and every criterion
 has a test. No assumption silently becomes policy or business approval.
 
-### 4. Documentation and test generation accelerator (20 minutes)
+### 5. Documentation and test generation accelerator (20 minutes)
 
 **Input:** `IntakeReviewer.Assess`, current tests, and the README.
 Run [docs-and-tests](.github/prompts/docs-and-tests.prompt.md):
@@ -216,7 +239,7 @@ and an onboarding example. Tests compile and pass, existing behavior is preserve
 docs match code, and unmeasured coverage is not claimed. A rejected or redundant
 generated test is a teaching opportunity, not a reason to weaken assertions.
 
-### 5. Explain my codebase (20 minutes)
+### 6. Explain my codebase (20 minutes)
 
 **Input:** the repository. Run
 [explain-codebase](.github/prompts/explain-codebase.prompt.md):
@@ -259,20 +282,20 @@ Coach setup in an approved training repository:
    is on the default branch and authentication is configured, manually dispatch it in
    Actions. Each run may publish **one real GitHub issue**; do not dispatch without consent.
 6. Inspect logs and the issue with participants. Check assumptions, acceptance criteria,
-   and test scenarios; compare to lab 3. Disable/remove the compiled workflow and
+   and test scenarios; compare to lab 4. Disable/remove the compiled workflow and
    revoke training credentials when done. Stop if unexpected tools or permissions appear.
 
 The agent runs read-only; a separate safe-output job performs the issue write.
 These controls reduce risk, not eliminate it. The coach must still review prompts,
 generated permissions, and outputs. If the feature is unavailable or not approved,
-walk through the source and use lab 3 interactively; do not present that as a live run.
+walk through the source and use lab 4 interactively; do not present that as a live run.
 This optional engine-backed workflow is separate from the ready-to-run
 [deterministic .NET CI](.github/workflows/dotnet.yml).
 
 ## Coach preparation and wrap-up
 
 - Before the event: run the quick start, verify Copilot access and asset discovery,
-  pre-open the five prompts, and rehearse one output per lab. No Azure resource or
+  pre-open the six prompts, and rehearse one output per lab. No Azure resource or
   paid external API integration is required for the local sample.
 - Use a branch per team. Keep changes scoped; never share secrets or actual TRS data.
 - If an SDK is missing, install .NET 10 rather than retargeting the sample.
@@ -281,8 +304,9 @@ This optional engine-backed workflow is separate from the ready-to-run
 - Review outcomes: can the team explain instructions vs prompts vs skills vs roles
   vs workflows? Which output was independently verified? What would need security,
   architecture, or policy approval before use on a real project?
-- Success means five reusable artifacts: agent context, review report, requirements
-  kit, docs/tests, and onboarding handoff—not lines of AI-generated code.
+- Success means six reusable artifacts: Copilot instructions, agent context,
+  review report, requirements kit, docs/tests, and onboarding handoff—not lines
+  of AI-generated code.
 
 ## References and adaptation
 
